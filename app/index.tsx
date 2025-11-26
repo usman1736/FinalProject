@@ -1,5 +1,14 @@
+import Button from "@/components/NavigationButton";
+import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import { Platform, StatusBar, StyleSheet, Text } from "react-native";
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Yup from "yup";
 
@@ -9,6 +18,7 @@ interface InputFields {
 }
 
 export default function Index() {
+  const router = useRouter();
   const schemaValidation = Yup.object().shape({
     email: Yup.string().required("Email can't be empty"),
     password: Yup.string()
@@ -21,7 +31,10 @@ export default function Index() {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Tic Tac Toe</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Tic Tac Toe</Text>
+      </View>
+
       <Formik<InputFields>
         validationSchema={schemaValidation}
         initialValues={{
@@ -30,7 +43,56 @@ export default function Index() {
         }}
         onSubmit={formValues}
       >
-        <>{}</>
+        {({
+          handleBlur,
+          values,
+          touched,
+          handleChange,
+          handleSubmit,
+          errors,
+        }) => (
+          <>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>Email</Text>
+              <TextInput
+                placeholder="Your Email"
+                placeholderTextColor="#F3F4F6"
+                style={styles.inputField}
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+              />
+              {errors.email && touched.email ? (
+                <Text style={styles.errorText}>{errors.email}</Text>
+              ) : null}
+
+              <Text style={styles.inputTitle}>Password</Text>
+              <TextInput
+                placeholder="Your Password"
+                placeholderTextColor="#F3F4F6"
+                style={styles.inputField}
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+              />
+              {errors.password && touched.password ? (
+                <Text style={styles.errorText}>{errors.password}</Text>
+              ) : null}
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                text={"Sign In"}
+                buttonColor="black"
+                buttonFunction={handleSubmit}
+              />
+              <Button
+                text={"Sign Up"}
+                buttonColor="white"
+                buttonFunction={() => router.push("/sign-up")}
+              />
+            </View>
+          </>
+        )}
       </Formik>
     </SafeAreaView>
   );
@@ -47,5 +109,31 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "800",
+    marginBottom: 50,
+  },
+  inputTitle: {
+    fontSize: 18,
+  },
+  inputField: {
+    backgroundColor: "#ffffff",
+    borderWidth: 2,
+    borderColor: "#E5E7EB",
+    paddingHorizontal: 12,
+    height: 50,
+    color: "black",
+    fontSize: 18,
+    borderRadius: 12,
+  },
+  errorText: {
+    color: "red",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    marginTop: 20,
+    width: "70%",
+    gap: 10,
+  },
+  inputContainer: {
+    width: "80%",
   },
 });
