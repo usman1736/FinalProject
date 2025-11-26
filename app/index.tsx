@@ -31,9 +31,7 @@ export default function Index() {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Tic Tac Toe</Text>
-      </View>
+      <Text style={styles.title}>Tic Tac Toe</Text>
 
       <Formik<InputFields>
         validationSchema={schemaValidation}
@@ -123,13 +121,13 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 18,
     borderRadius: 12,
+    marginBottom: 15,
   },
   errorText: {
     color: "red",
   },
   buttonContainer: {
     flexDirection: "row",
-    marginTop: 20,
     width: "70%",
     gap: 10,
   },
