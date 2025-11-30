@@ -23,4 +23,10 @@ export const AuthProvider = ({ children }: Prop) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const user = useContext(AuthContext);
+  if (!user) {
+    throw new Error("AuthContext Null");
+  }
+  return user;
+};

@@ -35,7 +35,7 @@ export default function Index() {
       setError(error);
       return;
     }
-    router.replace("/testpage");
+    router.replace("");
   };
   return (
     <SafeAreaView style={styles.container}>

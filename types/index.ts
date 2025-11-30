@@ -6,3 +6,8 @@ export type AuthContextValues = {
 export type Prop = {
   children: React.ReactNode;
 };
+
+export type addUserValues = {
+  name: string;
+  email: string;
+};

@@ -1,4 +1,5 @@
 import Button from "@/components/NavigationButton";
+import { addUser } from "@/firebase/controller";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
 import {
@@ -41,12 +42,14 @@ export default function SignUp() {
   });
 
   const formValues = async (values: InputFields) => {
-    const { error } = await userSignUp(values.email, values.password);
-    if (error) {
+    const { user, error } = await userSignUp(values.email, values.password);
+    if (error || !user) {
       setError(error);
       return;
     }
-    router.replace("/testpage");
+
+    await addUser(values.name, values.email, user.uid);
+    router.replace("");
   };
   return (
     <SafeAreaView style={styles.container}>
