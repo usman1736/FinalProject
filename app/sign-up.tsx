@@ -14,6 +14,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Yup from "yup";
 
+import { userSignUp } from "@/firebase/AuthHelpers";
+import { useState } from "react";
+
 interface InputFields {
   email: string;
   password: string;
@@ -22,6 +25,7 @@ interface InputFields {
 }
 
 export default function SignUp() {
+  const [error, setError] = useState(null);
   const router = useRouter();
   const schemaValidation = Yup.object().shape({
     email: Yup.string().required("Email can't be empty"),
@@ -36,8 +40,13 @@ export default function SignUp() {
       .oneOf([Yup.ref("password")], "Password must match"),
   });
 
-  const formValues = (values: InputFields) => {
-    console.log(values);
+  const formValues = async (values: InputFields) => {
+    const { error } = await userSignUp(values.email, values.password);
+    if (error) {
+      setError(error);
+      return;
+    }
+    router.replace("/testpage");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -120,6 +129,7 @@ export default function SignUp() {
                 buttonFunction={handleSubmit}
               />
             </View>
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
           </>
         )}
       </Formik>

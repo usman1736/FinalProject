@@ -1,6 +1,8 @@
 import Button from "@/components/NavigationButton";
+import { userSignIn } from "@/firebase/AuthHelpers";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
+import { useState } from "react";
 import {
   Platform,
   StatusBar,
@@ -11,13 +13,13 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Yup from "yup";
-
 interface InputFields {
   email: string;
   password: string;
 }
 
 export default function Index() {
+  const [error, setError] = useState(null);
   const router = useRouter();
   const schemaValidation = Yup.object().shape({
     email: Yup.string().required("Email can't be empty"),
@@ -26,8 +28,14 @@ export default function Index() {
       .min(5, "Password must be at least 5 characters long"),
   });
 
-  const formValues = (values: InputFields) => {
-    console.log(values);
+  const formValues = async (values: InputFields) => {
+    const { error } = await userSignIn(values.email, values.password);
+
+    if (error) {
+      setError(error);
+      return;
+    }
+    router.replace("/testpage");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -89,6 +97,7 @@ export default function Index() {
                 buttonFunction={() => router.push("/sign-up")}
               />
             </View>
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
           </>
         )}
       </Formik>
