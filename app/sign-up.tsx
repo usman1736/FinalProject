@@ -1,24 +1,31 @@
 import Button from "@/components/NavigationButton";
-import { userSignIn } from "@/firebase/AuthHelpers";
+import { addUser } from "@/firebase/controller";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import { useState } from "react";
 import {
   Platform,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Yup from "yup";
+
+import { userSignUp } from "@/firebase/AuthHelpers";
+import { useState } from "react";
+
 interface InputFields {
   email: string;
   password: string;
+  name: string;
+  confirmPassword: string;
 }
 
-export default function Index() {
+export default function SignUp() {
   const [error, setError] = useState(null);
   const router = useRouter();
   const schemaValidation = Yup.object().shape({
@@ -26,15 +33,22 @@ export default function Index() {
     password: Yup.string()
       .required("Password can't be empty")
       .min(5, "Password must be at least 5 characters long"),
+    name: Yup.string()
+      .required("Name can't be empty")
+      .min(3, "Name must be at least 3 characters long"),
+    confirmPassword: Yup.string()
+      .required("Confirm password can't be empty")
+      .oneOf([Yup.ref("password")], "Password must match"),
   });
 
   const formValues = async (values: InputFields) => {
-    const { error } = await userSignIn(values.email, values.password);
-
-    if (error) {
+    const { user, error } = await userSignUp(values.email, values.password);
+    if (error || !user) {
       setError(error);
       return;
     }
+
+    await addUser(values.name, values.email, user.uid);
     router.replace("");
   };
   return (
@@ -46,6 +60,8 @@ export default function Index() {
         initialValues={{
           email: "",
           password: "",
+          name: "",
+          confirmPassword: "",
         }}
         onSubmit={formValues}
       >
@@ -59,6 +75,18 @@ export default function Index() {
         }) => (
           <>
             <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>Name</Text>
+              <TextInput
+                placeholder="Your Name"
+                placeholderTextColor="#F3F4F6"
+                style={styles.inputField}
+                value={values.name}
+                onChangeText={handleChange("name")}
+                onBlur={handleBlur("name")}
+              />
+              {errors.name && touched.name ? (
+                <Text style={styles.errorText}>{errors.name}</Text>
+              ) : null}
               <Text style={styles.inputTitle}>Email</Text>
               <TextInput
                 placeholder="Your Email"
@@ -84,23 +112,33 @@ export default function Index() {
               {errors.password && touched.password ? (
                 <Text style={styles.errorText}>{errors.password}</Text>
               ) : null}
+              <Text style={styles.inputTitle}>Confirm Password</Text>
+              <TextInput
+                placeholder="Confirm Password"
+                placeholderTextColor="#F3F4F6"
+                style={styles.inputField}
+                value={values.confirmPassword}
+                onChangeText={handleChange("confirmPassword")}
+                onBlur={handleBlur("confirmPassword")}
+              />
+              {errors.confirmPassword && touched.confirmPassword ? (
+                <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+              ) : null}
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                text={"Sign In"}
+                text={"Create Account"}
                 buttonColor="black"
                 buttonFunction={handleSubmit}
-              />
-              <Button
-                text={"Sign Up"}
-                buttonColor="white"
-                buttonFunction={() => router.push("/sign-up")}
               />
             </View>
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
           </>
         )}
       </Formik>
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.loginText}>Have an account? Log In</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -136,11 +174,15 @@ const styles = StyleSheet.create({
     color: "red",
   },
   buttonContainer: {
-    flexDirection: "row",
+    marginTop: 10,
     width: "70%",
-    gap: 10,
+    flexDirection: "row",
   },
   inputContainer: {
     width: "80%",
+  },
+  loginText: {
+    marginTop: 10,
+    fontSize: 18,
   },
 });
