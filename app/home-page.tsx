@@ -17,7 +17,7 @@ export default function Home() {
     }
   }, [loading, userAuth]);
 
-  // Fetch user's name from Firestore
+  // Fetch username
   useEffect(() => {
     const fetchName = async () => {
       if (userAuth) {
@@ -28,7 +28,7 @@ export default function Home() {
     fetchName();
   }, [userAuth]);
 
-  // Black loading screen while Firebase checks
+  // Black loading screen
   if (loading) {
     return (
       <View style={styles.loadingScreen}>
@@ -37,7 +37,7 @@ export default function Home() {
     );
   }
 
-  // Logout → then go to Player Two screen
+  // Logout → Player Two
   const handleLogout = async () => {
     await userSignOut();
     router.replace("/player-two");
@@ -45,24 +45,19 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-
-      {/* Logout button */}
       <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
 
-      {/* User greeting */}
       <Text style={styles.title}>Hello, {userName}!</Text>
       <Text style={styles.subtitle}>Ready to play Tic Tac Toe?</Text>
 
-      {/* Start Game button */}
       <TouchableOpacity
         style={styles.playBtn}
         onPress={() => router.push("/player-two")}
       >
         <Text style={styles.playText}>Start Game</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
@@ -81,37 +76,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: "800",
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    marginBottom: 40,
-  },
-
-  // Logout button top right
-  logoutBtn: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-    padding: 10,
-  },
-  logoutText: {
-    fontSize: 18,
-    fontWeight: "700",
-  },
-
+  title: { fontSize: 32, fontWeight: "800", marginBottom: 10 },
+  subtitle: { fontSize: 18, marginBottom: 40 },
+  logoutBtn: { position: "absolute", top: 50, right: 20, padding: 10 },
+  logoutText: { fontSize: 18, fontWeight: "700" },
   playBtn: {
     backgroundColor: "black",
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 12,
   },
-  playText: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "700",
-  },
+  playText: { color: "white", fontSize: 20, fontWeight: "700" },
 });
