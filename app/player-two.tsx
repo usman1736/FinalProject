@@ -8,8 +8,8 @@ export default function PlayerTwo() {
   return (
     <SafeAreaView style={styles.container}>
 
-      {/* Back arrow */}
-      <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+      {/* Back arrow → go to HOME */}
+      <TouchableOpacity style={styles.backBtn} onPress={() => router.push("/home")}>
         <Text style={styles.backArrow}>←</Text>
       </TouchableOpacity>
 
@@ -17,17 +17,17 @@ export default function PlayerTwo() {
       <Text style={styles.title}>Enter{"\n"}Player Two’s{"\n"}Name</Text>
       <Text style={styles.subtitle}>This name will appear{"\n"}during the game.</Text>
 
-      {/* Input field */}
+      {/* Input field (UI only) */}
       <TextInput
         style={styles.input}
         placeholder="Player 2 Name..."
         placeholderTextColor="#9CA3AF"
       />
 
-      {/* Continue button */}
+      {/* Continue → go to GAME */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/game")} 
+        onPress={() => router.push("/game")}
       >
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
