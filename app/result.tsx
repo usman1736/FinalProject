@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function ResultScreen() {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
 
@@ -10,13 +13,21 @@ export default function ResultScreen() {
 
       {/* Buttons */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => router.push("/home")}
+        >
           <Text style={styles.buttonText}>Return Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => router.push("/game")}
+        >
           <Text style={styles.buttonText}>Rematch</Text>
         </TouchableOpacity>
+
       </View>
 
       {/* Scoreboard */}
