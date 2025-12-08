@@ -1,15 +1,32 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { Formik } from "formik";
+import * as Yup from "yup";
+
+interface InputFields {
+  playerTwoName: string;
+}
 
 export default function PlayerTwo() {
   const router = useRouter();
+
+  const schemaValidation = Yup.object().shape({
+    playerTwoName: Yup.string().required("Name can't be empty"),
+  });
+
+  const formValues = (values: InputFields) => {
+    router.push({
+      pathname: "/game",
+      params: { playerTwoName: values.playerTwoName },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
 
       {/* Back arrow → go to HOME */}
-      <TouchableOpacity style={styles.backBtn} onPress={() => router.push("/home")}>
+      <TouchableOpacity style={styles.backBtn} onPress={() => router.push("/home-page")}>
         <Text style={styles.backArrow}>←</Text>
       </TouchableOpacity>
 
@@ -17,21 +34,43 @@ export default function PlayerTwo() {
       <Text style={styles.title}>Enter{"\n"}Player Two’s{"\n"}Name</Text>
       <Text style={styles.subtitle}>This name will appear{"\n"}during the game.</Text>
 
-      {/* Input field (UI only) */}
-      <TextInput
-        style={styles.input}
-        placeholder="Player 2 Name..."
-        placeholderTextColor="#9CA3AF"
-      />
-
-      {/* Continue → go to GAME */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("/game")}
+      <Formik<InputFields>
+        validationSchema={schemaValidation}
+        initialValues={{ playerTwoName: "" }}
+        onSubmit={formValues}
       >
-        <Text style={styles.buttonText}>Continue</Text>
-      </TouchableOpacity>
+        {({
+          handleBlur,
+          values,
+          touched,
+          handleChange,
+          handleSubmit,
+          errors,
+        }) => (
+          <>
+            {/* Input field */}
+            <TextInput
+              style={styles.input}
+              placeholder="Player 2 Name..."
+              placeholderTextColor="#9CA3AF"
+              value={values.playerTwoName}
+              onChangeText={handleChange("playerTwoName")}
+              onBlur={handleBlur("playerTwoName")}
+            />
+            {errors.playerTwoName && touched.playerTwoName ? (
+              <Text style={styles.errorText}>{errors.playerTwoName}</Text>
+            ) : null}
 
+            {/* Continue → go to GAME */}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleSubmit()}
+            >
+              <Text style={styles.buttonText}>Continue</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </Formik>
     </SafeAreaView>
   );
 }
@@ -94,5 +133,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "700",
+  },
+
+  errorText: {
+    color: "red"
   }
 });

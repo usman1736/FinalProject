@@ -35,7 +35,7 @@ export default function Index() {
       setError(error);
       return;
     }
-    router.replace("");
+    router.replace("/home-page");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +62,7 @@ export default function Index() {
               <Text style={styles.inputTitle}>Email</Text>
               <TextInput
                 placeholder="Your Email"
-                placeholderTextColor="#F3F4F6"
+                placeholderTextColor="#9CA3AF"
                 style={styles.inputField}
                 value={values.email}
                 onChangeText={handleChange("email")}
@@ -75,11 +75,12 @@ export default function Index() {
               <Text style={styles.inputTitle}>Password</Text>
               <TextInput
                 placeholder="Your Password"
-                placeholderTextColor="#F3F4F6"
+                placeholderTextColor="#9CA3AF"
                 style={styles.inputField}
                 value={values.password}
                 onChangeText={handleChange("password")}
                 onBlur={handleBlur("password")}
+                secureTextEntry={true}
               />
               {errors.password && touched.password ? (
                 <Text style={styles.errorText}>{errors.password}</Text>

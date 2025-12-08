@@ -49,7 +49,7 @@ export default function SignUp() {
     }
 
     await addUser(values.name, values.email, user.uid);
-    router.replace("");
+    router.replace("/home-page");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -78,7 +78,7 @@ export default function SignUp() {
               <Text style={styles.inputTitle}>Name</Text>
               <TextInput
                 placeholder="Your Name"
-                placeholderTextColor="#F3F4F6"
+                placeholderTextColor="#9CA3AF"
                 style={styles.inputField}
                 value={values.name}
                 onChangeText={handleChange("name")}
@@ -90,7 +90,7 @@ export default function SignUp() {
               <Text style={styles.inputTitle}>Email</Text>
               <TextInput
                 placeholder="Your Email"
-                placeholderTextColor="#F3F4F6"
+                placeholderTextColor="#9CA3AF"
                 style={styles.inputField}
                 value={values.email}
                 onChangeText={handleChange("email")}
@@ -103,11 +103,12 @@ export default function SignUp() {
               <Text style={styles.inputTitle}>Password</Text>
               <TextInput
                 placeholder="Your Password"
-                placeholderTextColor="#F3F4F6"
+                placeholderTextColor="#9CA3AF"
                 style={styles.inputField}
                 value={values.password}
                 onChangeText={handleChange("password")}
                 onBlur={handleBlur("password")}
+                secureTextEntry={true}
               />
               {errors.password && touched.password ? (
                 <Text style={styles.errorText}>{errors.password}</Text>
@@ -115,11 +116,12 @@ export default function SignUp() {
               <Text style={styles.inputTitle}>Confirm Password</Text>
               <TextInput
                 placeholder="Confirm Password"
-                placeholderTextColor="#F3F4F6"
+                placeholderTextColor="#9CA3AF"
                 style={styles.inputField}
                 value={values.confirmPassword}
                 onChangeText={handleChange("confirmPassword")}
                 onBlur={handleBlur("confirmPassword")}
+                secureTextEntry={true}
               />
               {errors.confirmPassword && touched.confirmPassword ? (
                 <Text style={styles.errorText}>{errors.confirmPassword}</Text>
