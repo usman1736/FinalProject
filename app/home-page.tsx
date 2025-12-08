@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { useAuth } from "@/firebase/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { getUser } from "@/firebase/controller";
 import { userSignOut } from "@/firebase/AuthHelpers";
 
