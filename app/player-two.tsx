@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
@@ -25,7 +25,7 @@ export default function PlayerTwo() {
   return (
     <SafeAreaView style={styles.container}>
 
-      {/* Back arrow → go to HOME */}
+      {/* Back arrow to go home*/}
       <TouchableOpacity style={styles.backBtn} onPress={() => router.push("/home-page")}>
         <Text style={styles.backArrow}>←</Text>
       </TouchableOpacity>
@@ -61,7 +61,7 @@ export default function PlayerTwo() {
               <Text style={styles.errorText}>{errors.playerTwoName}</Text>
             ) : null}
 
-            {/* Continue → go to GAME */}
+            {/* Go to game */}
             <TouchableOpacity
               style={styles.button}
               onPress={() => handleSubmit()}

@@ -37,7 +37,7 @@ export default function Home() {
     );
   }
 
-  // Logout → Player Two
+  // Logout
   const handleLogout = async () => {
     await userSignOut();
     router.replace("/player-two");
