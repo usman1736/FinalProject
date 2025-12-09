@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 interface Props {
@@ -8,13 +8,8 @@ interface Props {
 }
 
 const Button = ({ text, buttonColor, buttonFunction }: Props) => {
-  const [color, setColor] = useState("");
 
   const styles = buttonStyles(buttonColor);
-
-  useEffect(() => {
-    setColor(buttonColor);
-  }, []);
   return (
     <TouchableOpacity style={styles.button} onPress={buttonFunction}>
       <Text style={styles.buttonText}>{text}</Text>
